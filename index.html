@@ -441,6 +441,22 @@
                 }
             });
 
+            const moduleCodeInput = document.getElementById('module_code');
+            const moduleCodeRegex = /^[A-Z]{2}[4-8]{3}$/;
+            if (moduleCodeInput.value.trim() && !moduleCodeRegex.test(moduleCodeInput.value.trim())) {
+                console.log(';ijqwijei')
+                hasError = true;
+
+                const error = document.createElement('span');
+                error.className = 'error-msg';
+                error.style.color = 'red';
+                error.style.fontSize = '0.85em';
+                error.style.marginLeft = '10px';
+                error.textContent = 'Please match the pattern';
+
+                moduleCodeInput.parentNode.appendChild(error);
+            }
+
             if (hasError) return;
 
             e.target.submit();
