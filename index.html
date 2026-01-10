@@ -471,6 +471,10 @@
 
         // Get date again when hitting reset as it will remove current date value
         document.getElementById('translate-form').addEventListener('reset', function () {
+            const findAndReplaceOccurrence = document.getElementById('find_and_replace_occurrence');
+            if (findAndReplaceOccurrence) {
+                findAndReplaceOccurrence.remove();
+            }
             setTimeout(() => {
                 getDate();
             }, 0);
