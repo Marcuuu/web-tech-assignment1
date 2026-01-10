@@ -426,23 +426,23 @@
         // Logic for clicking the find and replace button
         function findAndReplace() {
             const messageEl = document.getElementById('q');
-            const findInput = document.getElementById('find').value;
-            const replaceInput = document.getElementById('replace').value;
+            const findInput = document.getElementById('find');
+            const replaceInput = document.getElementById('replace');
 
-            if (findInput.trim() === '' || replaceInput.trim() === '') return;
+            if (findInput.value.trim() === '' || replaceInput.value.trim() === '') return;
 
             let message = messageEl.value;
             let count = 0;
 
-            let index = message.toLowerCase().indexOf(findInput.toLowerCase());
+            let index = message.toLowerCase().indexOf(findInput.value.toLowerCase());
 
             // Keep track if there are still instances of find value in message
             while (index != -1) {
                 // Modify message to replace the find value with replace value
                 message =
                     message.slice(0, index) +
-                    replaceInput +
-                    message.slice(index + findInput.length);
+                    replaceInput.value +
+                    message.slice(index + findInput.value.length);
 
                 // Increase count to keep track how many occurrences
                 count++;
@@ -450,11 +450,15 @@
                 // Update index for next interation
                 index = message
                     .toLowerCase()
-                    .indexOf(findInput.toLowerCase(), index + replaceInput.length);
+                    .indexOf(findInput.value.toLowerCase(), index + replaceInput.value.length);
             }
 
             // Update message input value with modified value
             messageEl.value = message;
+
+            // Remove value in find and replace once complete
+            findInput.value = '';
+            replaceInput.value = '';
 
             // Update occurrence text
             const findAndReplaceOccurrence = document.getElementById('find_and_replace_occurrence');
