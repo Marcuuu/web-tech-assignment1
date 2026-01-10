@@ -27,6 +27,15 @@
         .section-content {
             display: flex;
             align-items: center;
+
+            img {
+                width: 30%;
+                max-width: 250px;
+            }
+
+            pre {
+                width: 70%;
+            }
         }
 
         dt {
@@ -40,6 +49,10 @@
 
         .ssa-table td {
             padding: 0;
+        }
+
+        .text-red {
+            color: red;
         }
 
     </style>
@@ -231,6 +244,47 @@
                 td {
                     display: flex;
                     flex-direction: column;
+
+                    div:not(:last-child) {
+                        margin-bottom: 10px;
+                    }
+                }
+
+                #find_and_replace {
+                    width: 100%;
+                }
+
+                #find_and_replace_occurrence {
+                    text-align: center;
+                    margin-top: 5px;
+                }
+
+                .message-container {
+                    display: flex;
+                }
+
+                .sl-list {
+                    list-style-type: none;
+                    padding-left: 0;
+                    margin: 0;
+
+                    input[type=radio] {
+                        margin-left: 0;
+                    }
+                }
+
+                .tl {
+                    width: 100%;
+                }
+
+                .translate-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    button {
+                        width: 100%;
+                    }
                 }
             }
 
@@ -243,15 +297,15 @@
             <table>
                 <tr>
                     <td>
-                        <div style="margin-bottom:10px;">
-                            <label for="name">Name <span style="color:red;">*</span></label>
+                        <div>
+                            <label for="name">Name <span class="text-red">*</span></label>
                             <input type="text"
                                    name="name"
                                    id="name"
                                    placeholder="Name" />
                         </div>
-                        <div style="margin-bottom:10px;">
-                            <label for="module_code">Module Code <span style="color:red;">*</span></label>
+                        <div>
+                            <label for="module_code">Module Code <span class="text-red">*</span></label>
                             <input type="text"
                                    name="module_code"
                                    id="module_code"
@@ -268,20 +322,20 @@
                 </tr>
                 <tr>
                     <td>
-                        <div style="display:flex;margin-bottom:10px;">
-                            <label for="q">Message <span style="color: red;">*</span></label>
+                        <div class="message-container">
+                            <label for="q">Message <span class="text-red">*</span></label>
                             <textarea name="q"
                                       id="q"
                                       rows="3"
                                       cols="20">Hello 202509</textarea>
                         </div>
-                        <div style="margin-bottom:10px;">
+                        <div>
                             <label for="find">Find</label>
                             <input type="text"
                                    name="find"
                                    id="find" />
                         </div>
-                        <div style="margin-bottom:10px;">
+                        <div>
                             <label for="replace">Replace</label>
                             <input type="text"
                                    name="replace"
@@ -289,18 +343,16 @@
                         </div>
                         <div>
                             <button type="button"
-                                    style="width:100%;"
                                     id="find_and_replace">Find and Replace</button>
-                            <div id="find_and_replace_occurrence"
-                                 style="text-align:center;margin-top:5px;"></div>
+                            <div id="find_and_replace_occurrence"></div>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td>
-                        <div style="margin-bottom:10px;">
+                        <div>
                             <label for="sl">Source Language</label>
-                            <ul style="list-style-type:none;padding-left:0;margin:0;">
+                            <ul class="sl-list">
                                 <li>
                                     <input type="radio"
                                            name="sl"
@@ -318,22 +370,20 @@
                                 </li>
                             </ul>
                         </div>
-                        <div style="margin-bottom:10px;">
+                        <div>
                             <label for="tl">Target Language</label>
                             <select name="tl"
                                     id="tl"
-                                    style="width:100%;">
+                                    class="tl">
                                 <option value="zh-CN"
                                         checked>Chinese</option>
                                 <option value="ja">Japanese</option>
                                 <option value="ko">Korean</option>
                             </select>
                         </div>
-                        <div style="display:flex;align-items:center;gap:10px;">
-                            <button style="width:100%;"
-                                    type="submit">Translate</button>
-                            <button style="width:100%;"
-                                    type="reset">Reset</button>
+                        <div class="translate-container">
+                            <button type="submit">Translate</button>
+                            <button type="reset">Reset</button>
                         </div>
                     </td>
                 </tr>
@@ -341,23 +391,28 @@
         </form>
     </body>
     <script>
-        let currentDate = document.getElementById('current_date');
-        const date = new Date();
-        const day = date.getDate();
-        const month = date.toLocaleString('en-GB', { month: 'long' });
-        const year = date.getFullYear();
-        const weekday = date.toLocaleString('en-GB', { weekday: 'long' });
+        // Init date
+        function getDate() {
+            const currentDate = document.getElementById('current_date');
+            const date = new Date();
+            const day = date.getDate();
+            const month = date.toLocaleString('en-GB', { month: 'long' });
+            const year = date.getFullYear();
+            const weekday = date.toLocaleString('en-GB', { weekday: 'long' });
 
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        const ampm = hours >= 12 ? 'PM' : 'AM';
+            let hours = date.getHours();
+            let minutes = date.getMinutes();
+            const ampm = hours >= 12 ? 'PM' : 'AM';
 
-        hours = hours % 12 || 12;
-        minutes = minutes.toString().padStart(2, '0');
+            hours = hours % 12 || 12;
+            minutes = minutes.toString().padStart(2, '0');
 
-        currentDate.value = `${day} ${month} ${year} ${weekday} ${hours}:${minutes} ${ampm}`;
-        currentDate.style.width = (currentDate.value.length + 1) + 'ch';
+            // Date formatting
+            currentDate.value = `${day} ${month} ${year} ${weekday} ${hours}:${minutes} ${ampm}`;
+            currentDate.style.width = (currentDate.value.length + 1) + 'ch';
+        }
 
+        // Find and replace logic
         const findInput = document.getElementById('find');
         const replaceInput = document.getElementById('replace');
 
@@ -365,10 +420,10 @@
             replaceInput.disabled = findInput.value.trim() === '';
         }
 
-        toggleReplace();
-
+        // Add listener to find input
         findInput.addEventListener('input', toggleReplace);
 
+        // Logic for clicking the find and replace button
         function findAndReplace() {
             const messageEl = document.getElementById('q');
             const findInput = document.getElementById('find').value;
@@ -381,84 +436,115 @@
 
             let index = message.toLowerCase().indexOf(findInput.toLowerCase());
 
+            // Keep track if there are still instances of find value in message
             while (index != -1) {
+                // Modify message to replace the find value with replace value
                 message =
                     message.slice(0, index) +
                     replaceInput +
                     message.slice(index + findInput.length);
 
+                // Increase count to keep track how many occurrences
                 count++;
 
+                // Update index for next interation
                 index = message
                     .toLowerCase()
                     .indexOf(findInput.toLowerCase(), index + replaceInput.length);
             }
 
+            // Update message input value with modified value
             messageEl.value = message;
 
+            // Update occurrence text
             const findAndReplaceOccurrence = document.getElementById('find_and_replace_occurrence');
             findAndReplaceOccurrence.textContent = `${count} occurrence replaced`;
         }
 
+        // Callback for find and replace button
         const findAndReplaceButton = document.getElementById('find_and_replace');
         findAndReplaceButton.addEventListener('click', findAndReplace);
 
-        const currentDateInput = document.getElementById('current_date');
-        const originalValue = currentDateInput.value;
-
+        // Get date again when hitting reset as it will remove current date value
         document.getElementById('translate-form').addEventListener('reset', function () {
             setTimeout(() => {
-                currentDateInput.value = originalValue;
+                getDate();
             }, 0);
         });
 
+        // Validate form on submit
         document.getElementById('translate-form').addEventListener('submit', function (e) {
             e.preventDefault();
+            // Store fields easier to add more fields in future
             const fields = [
-                { id: 'name', message: 'Please enter a name' },
-                { id: 'module_code', message: 'Please enter a module code' },
+                { id: 'name', sub: 'sub_name', message: 'Please enter a name', sub_message: 'Name cannot contain special characters or numbers' },
+                { id: 'module_code', sub: 'sub_module_code', message: 'Please enter a module code', sub_message: 'Module code has to start with 2 uppercase alphabet followed by 3 digits in the range of 4 to 8 (inclusive of both ends)' },
                 { id: 'q', message: 'Please enter a message' }
             ];
 
             let hasError = false;
+
+            // Loop through each module and validate
             fields.forEach(field => {
                 const input = document.getElementById(field.id);
 
+                // Remove any existing errors
                 const existingError = input.parentNode.querySelector('.error-msg');
                 if (existingError) existingError.remove();
 
+                // Validate empty input
                 if (!input.value.trim()) {
                     hasError = true;
+                    showError(input, field.message);
+                }
 
-                    const error = document.createElement('span');
-                    error.className = 'error-msg';
-                    error.style.color = 'red';
-                    error.style.fontSize = '0.85em';
-                    error.style.marginLeft = '10px';
-                    error.textContent = field.message;
+                // Validate name input for special characters or numbers
+                if (field.sub === 'sub_name' && input.value.trim() !== '') {
+                    const nameRegex = /^[A-Za-z\s]+$/;
 
-                    input.parentNode.appendChild(error);
+                    if (!nameRegex.test(input.value.trim())) {
+                        hasError = true;
+                        showError(input, field.sub_message);
+                    }
+                }
+
+                // Validate module code input for formatting
+                const moduleCodeRegex = /^[A-Z]{2}[4-8]{3}$/;
+                if (field.sub === 'sub_module_code' && input.value.trim() !== '' && !moduleCodeRegex.test(input.value.trim())) {
+                    hasError = true;
+                    showError(input, field.sub_message);
                 }
             });
 
-            const moduleCodeInput = document.getElementById('module_code');
-            const moduleCodeRegex = /^[A-Z]{2}[4-8]{3}$/;
-            if (moduleCodeInput.value.trim() && !moduleCodeRegex.test(moduleCodeInput.value.trim())) {
-                hasError = true;
-
-                const error = document.createElement('span');
-                error.className = 'error-msg';
-                error.style.color = 'red';
-                error.style.fontSize = '0.85em';
-                error.style.marginLeft = '10px';
-                error.textContent = 'Please match the pattern';
-
-                moduleCodeInput.parentNode.appendChild(error);
-            }
-
+            // Prevent submission by returning early if any errors are found
             if (hasError) return;
 
+            // Submit form once there are no errors
             e.target.submit();
+        });
+
+        // Helper for displaying error message
+        function showError(input, message) {
+            const existingError = input.parentNode.querySelector('.error-msg');
+            if (existingError) existingError.remove();
+
+            const error = document.createElement('span');
+            error.className = 'error-msg';
+            error.style.color = 'red';
+            error.style.fontSize = '0.85em';
+            error.style.marginLeft = '10px';
+            error.textContent = message;
+
+            input.parentNode.appendChild(error);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Date is ready on page load
+            getDate();
+
+            // Trigger on page load to disable replace input
+            // as find will always be empty
+            toggleReplace();
         });
     </script>
 
